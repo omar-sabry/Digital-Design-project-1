@@ -33,7 +33,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
     
-    //Retrieving number of variables from the first line.
+    //Retrieving lines.
     getline(inputFromFile, line);
     getline(inputFromFile, line2);
     getline(inputFromFile, line3);
