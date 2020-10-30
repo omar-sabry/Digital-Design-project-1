@@ -1,11 +1,3 @@
-//
-//  main.cpp
-//  QMProject
-//
-//  Created by Salma Ahmed on 10/28/20.
-//  Copyright © 2020 Salma Ahmed. All rights reserved.
-//
-
 #include <iostream>
 #include <vector>
 #include <fstream>
