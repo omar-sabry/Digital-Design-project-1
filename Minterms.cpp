@@ -83,5 +83,6 @@ string Minterms::editByte(string s1, string s2)
         }
     }
     return editedString;
+    
 }
 
