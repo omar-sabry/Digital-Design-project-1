@@ -73,7 +73,7 @@ bool Minterms::checkIfPair(string s1, string s2)
 
 string Minterms::editByte(string s1, string s2)
 {
-    // Returns a string with '-' in the different bit
+    // Returns a string with '_' in the different bit
     string editedString = s1;
     for (int i=0 ; i<8 ; i++)
     {
