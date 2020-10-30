@@ -21,17 +21,18 @@ bool existing(vector<string> a,string b);
 vector<string> recursivePairs(vector<string> minterms,Minterms groupOfMinterms);
 bool VectorsEqual(vector<string> a,vector<string> b);
 
+
 int main() {
     
     vector <int> MintermDecimals;
     vector <string> Minterm8Bits;
     
+    
     ifstream inputFromFile;
-    string line;
+    string line, line2, line3;
     
     Minterms groupOfMinterms;
     
-    //Opening of text file and validation.
     inputFromFile.open("/Users/salmaabdellatif/Desktop/inputFile1.txt");
     if (!inputFromFile.is_open())
     {
@@ -41,7 +42,9 @@ int main() {
     
     //Retrieving number of variables from the first line.
     getline(inputFromFile, line);
-    
+    getline(inputFromFile, line2);
+    getline(inputFromFile, line3);
+
     int NoofVariables=0;
     stringstream converter(line);
        
@@ -51,28 +54,49 @@ int main() {
     cout << "The number of variables for this function are: " << line <<".\n";
     
     //For the second line, processing each minterm seperately, using the existence of the first line as a condition to move to the second line.
-       if (getline(inputFromFile,line))
-       {
-           istringstream x(line);
-           string temp, temptwo;
+       stringstream ssLine2(line2);
+       stringstream ssLine3(line3);
+
+        while (ssLine2.good())
+        {
+            string nextCharacter;
+            getline(ssLine2, nextCharacter, ',');
+            groupOfMinterms.counter();
+            int mintermValue = groupOfMinterms.setMintermNo(nextCharacter, MaxNoofMinterms);
+            string mintermBinary = groupOfMinterms.convertToBinary(mintermValue);
+            MintermDecimals.push_back(mintermValue);
+            Minterm8Bits.push_back(mintermBinary);
+        }
+        
+        while (ssLine3.good())
+        {
+            string nextCharacter;
+            getline(ssLine3, nextCharacter, ',');
+            groupOfMinterms.counter();
+            int mintermValue = groupOfMinterms.setMintermNo(nextCharacter, MaxNoofMinterms);
+            string mintermBinary = groupOfMinterms.convertToBinary(mintermValue);
+            MintermDecimals.push_back(mintermValue);
+            Minterm8Bits.push_back(mintermBinary);
+        }
+        
+        
+        inputFromFile.close();
+
            
-           
-           cout << "The minterms for this function are: \n" ;
-           for(int i = 0; i < 2; i++)
-           {
-               while (getline(x, temp, ','))
-                   {
-                       groupOfMinterms.counter();
-                       int mintermValue = groupOfMinterms.setMintermNo(temp, MaxNoofMinterms);
-                       string mintermBinary = groupOfMinterms.convertToBinary(mintermValue);
-                       MintermDecimals.push_back(mintermValue);
-                       Minterm8Bits.push_back(mintermBinary);
-                   }
-               }
-           }
-    
+       
+
     for (int i=0; i<MintermDecimals.size();i++)
-     cout << MintermDecimals[i] <<endl;
+    {
+       for (int j=i+1; j< MintermDecimals.size(); j++)
+            {
+                if (MintermDecimals[i]==MintermDecimals[j])
+                {
+                 cout << "Error. Repeated minterm values. Please correct your input file and start again." << endl;
+                 exit(EXIT_FAILURE);
+                }
+            }
+        cout << MintermDecimals[i] <<endl;
+    }
     
     for (int i=0; i<MintermDecimals.size();i++)
        {
@@ -147,7 +171,9 @@ vector<string> recursivePairs(vector<string> binaryMinterms, Minterms groupOfMin
                 checked[j]=1;
                 if(!existing(newminterms, groupOfMinterms.editByte(binaryMinterms[i], binaryMinterms[j])))
                    newminterms.push_back(groupOfMinterms.editByte(binaryMinterms[i],binaryMinterms[j]));
-        }
+            }
+            
+            
     }
     }
     for(int i=0;i<max;i++)
@@ -175,3 +201,4 @@ bool VectorsEqual(vector<string> a,vector<string> b)
     }
     return true;
 }
+
