@@ -1,0 +1,177 @@
+//
+//  main.cpp
+//  QMProject
+//
+//  Created by Salma Ahmed on 10/28/20.
+//  Copyright © 2020 Salma Ahmed. All rights reserved.
+//
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cmath>
+#include "Minterms.hpp"
+using namespace std;
+
+int countNoofOnes(string a);
+bool compareNoofOnes(string a, string b);
+bool existing(vector<string> a,string b);
+vector<string> recursivePairs(vector<string> minterms,Minterms groupOfMinterms);
+bool VectorsEqual(vector<string> a,vector<string> b);
+
+int main() {
+    
+    vector <int> MintermDecimals;
+    vector <string> Minterm8Bits;
+    
+    ifstream inputFromFile;
+    string line;
+    
+    Minterms groupOfMinterms;
+    
+    //Opening of text file and validation.
+    inputFromFile.open("/Users/salmaabdellatif/Desktop/inputFile1.txt");
+    if (!inputFromFile.is_open())
+    {
+        cout <<"There was a problem accessing your desired function.\n";
+        exit(EXIT_FAILURE);
+    }
+    
+    //Retrieving number of variables from the first line.
+    getline(inputFromFile, line);
+    
+    int NoofVariables=0;
+    stringstream converter(line);
+       
+    converter>>NoofVariables;
+    
+    int MaxNoofMinterms = pow(2,NoofVariables);
+    cout << "The number of variables for this function are: " << line <<".\n";
+    
+    //For the second line, processing each minterm seperately, using the existence of the first line as a condition to move to the second line.
+       if (getline(inputFromFile,line))
+       {
+           istringstream x(line);
+           string temp, temptwo;
+           
+           
+           cout << "The minterms for this function are: \n" ;
+           for(int i = 0; i < 2; i++)
+           {
+               while (getline(x, temp, ','))
+                   {
+                       groupOfMinterms.counter();
+                       int mintermValue = groupOfMinterms.setMintermNo(temp, MaxNoofMinterms);
+                       string mintermBinary = groupOfMinterms.convertToBinary(mintermValue);
+                       MintermDecimals.push_back(mintermValue);
+                       Minterm8Bits.push_back(mintermBinary);
+                   }
+               }
+           }
+    
+    for (int i=0; i<MintermDecimals.size();i++)
+     cout << MintermDecimals[i] <<endl;
+    
+    for (int i=0; i<MintermDecimals.size();i++)
+       {
+           for (int j=i;j<MintermDecimals.size();j++)
+               compareNoofOnes(Minterm8Bits[i], Minterm8Bits[j]);
+           sort(Minterm8Bits.begin(), Minterm8Bits.end(), compareNoofOnes);
+           cout << Minterm8Bits[i] << endl;
+       }
+    
+    do
+    {
+        Minterm8Bits= recursivePairs(Minterm8Bits, groupOfMinterms);
+        sort(Minterm8Bits.begin(),Minterm8Bits.end());
+    }while(!VectorsEqual(Minterm8Bits,recursivePairs(Minterm8Bits, groupOfMinterms)));
+   
+
+  
+   
+for (int i=0; i<Minterm8Bits.size(); i++)
+{
+    cout <<Minterm8Bits[i]<<endl;
+}
+
+
+    return 0;
+}
+
+int countNoofOnes(string a)
+{
+    int countofOnes=0;
+    for (int i=0 ; i<8 ; i++)
+    {
+        if (a[i]=='1')
+        {
+            countofOnes++;
+        }
+    }
+    return countofOnes;
+}
+
+bool compareNoofOnes(string a, string b)
+{
+    
+    int count1 = countNoofOnes(a);
+    int count2 = countNoofOnes(b);
+    
+    if (count1 >= count2)
+        return false;
+    return true;
+}
+
+bool existing(vector<string> a,string b)
+{
+    for(int i=0;i<a.size();i++)
+        if(a[i].compare(b)==0)
+            return true;
+    return false;
+}
+
+vector<string> recursivePairs(vector<string> binaryMinterms, Minterms groupOfMinterms)
+{
+    vector<string> newminterms;
+    int max=binaryMinterms.size();
+    int* checked = new int[max];
+    for(int i=0;i<max;i++)
+    {
+        for(int j=i;j<max;j++)
+        {
+            if(groupOfMinterms.checkIfPair(binaryMinterms[i],binaryMinterms[j]))
+            {
+                checked[i]=1;
+                checked[j]=1;
+                if(!existing(newminterms, groupOfMinterms.editByte(binaryMinterms[i], binaryMinterms[j])))
+                   newminterms.push_back(groupOfMinterms.editByte(binaryMinterms[i],binaryMinterms[j]));
+        }
+    }
+    }
+    for(int i=0;i<max;i++)
+    {
+        if((checked[i]!=1) && !(existing(newminterms,binaryMinterms[i])))
+            newminterms.push_back(binaryMinterms[i]);
+    }
+    
+    delete[] checked;
+    
+    return newminterms;
+    
+}
+bool VectorsEqual(vector<string> a,vector<string> b)
+{
+    if(a.size()!=b.size())
+        return false;
+    
+    sort(a.begin(),a.end());
+    sort(b.begin(),b.end());
+    for(int i=0;i<a.size();i++)
+    {
+        if(a[i]!=b[i])
+            return false;
+    }
+    return true;
+}
