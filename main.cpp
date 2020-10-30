@@ -5,6 +5,7 @@
 #include <string>
 #include <cmath>
 #include "Minterms.hpp"
+
 using namespace std;
 
 int countNoofOnes(string a);
