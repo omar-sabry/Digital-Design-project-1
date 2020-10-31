@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-
 using namespace std;
 
 class Minterms
@@ -15,6 +14,7 @@ private:
     int count;
 
 public:
+    vector<string> newminterms;
     Minterms();
     int setMintermNo(string, int);
     string convertToBinary(int);
