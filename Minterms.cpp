@@ -20,7 +20,7 @@ int Minterms::setMintermNo(string M, int MM)
     stringstream converter(M);
     
     converter>>MintermValue;
-    if (MintermValue>MM)
+    if ((MintermValue<0)||(MintermValue>MM))
     {
         cout << "Error. There cannot be more than " << MM << " minterms for this function. Please correct your input file \n";
         exit(EXIT_FAILURE);
@@ -73,7 +73,7 @@ bool Minterms::checkIfPair(string s1, string s2)
 
 string Minterms::editByte(string s1, string s2)
 {
-    // Returns a string with '_' in the different bit
+    // Returns a string with '-' in the different bit
     string editedString = s1;
     for (int i=0 ; i<8 ; i++)
     {
@@ -83,6 +83,4 @@ string Minterms::editByte(string s1, string s2)
         }
     }
     return editedString;
-    
 }
-
