@@ -90,6 +90,7 @@ int main() {
             }
         cout << MintermDecimals[i] <<endl;
     }
+     cout << endl;
     
     for (int i=0; i<MintermDecimals.size();i++)
        {
@@ -98,20 +99,19 @@ int main() {
            sort(Minterm8Bits.begin(), Minterm8Bits.end(), compareNoofOnes);
            cout << Minterm8Bits[i] << endl;
        }
-    
+     cout << endl;
     do
     {
         Minterm8Bits= recursivePairs(Minterm8Bits, groupOfMinterms);
-        sort(Minterm8Bits.begin(),Minterm8Bits.end());
+        sort(Minterm8Bits.begin(), Minterm8Bits.end(),compareNoofOnes);
+        for (int i=0; i<Minterm8Bits.size(); i++)
+            cout << Minterm8Bits[i] <<endl;
+        cout << endl;
     }while(!VectorsEqual(Minterm8Bits,recursivePairs(Minterm8Bits, groupOfMinterms)));
    
 
   
    
-for (int i=0; i<Minterm8Bits.size(); i++)
-{
-    cout <<Minterm8Bits[i]<<endl;
-}
 
 
     return 0;
@@ -194,4 +194,3 @@ bool VectorsEqual(vector<string> a,vector<string> b)
     }
     return true;
 }
-
