@@ -19,7 +19,7 @@ int main() {
     
     vector <int> MintermDecimals;
     vector <string> Minterm8Bits;
-    
+    vector <int> arrayOfPairs;
     
     ifstream inputFromFile;
     string line, line2, line3;
@@ -38,15 +38,11 @@ int main() {
     getline(inputFromFile, line2);
     getline(inputFromFile, line3);
 
-    int NoofVariables=0;
-    stringstream converter(line);
-       
-    converter>>NoofVariables;
-    
+    int NoofVariables=stoi(line);
     int MaxNoofMinterms = pow(2,NoofVariables);
-    cout << "The number of variables for this function are: " << line <<".\n";
     
-    //For the second line, processing each minterm seperately, using the existence of the first line as a condition to move to the second line.
+    cout << "The number of variables for this function are: " << line <<".\n";
+ 
        stringstream ssLine2(line2);
        stringstream ssLine3(line3);
 
@@ -100,20 +96,31 @@ int main() {
            cout << Minterm8Bits[i] << endl;
        }
      cout << endl;
+    int noOfColumns=0;
     do
     {
+        noOfColumns++;
         Minterm8Bits= recursivePairs(Minterm8Bits, groupOfMinterms);
         sort(Minterm8Bits.begin(), Minterm8Bits.end(),compareNoofOnes);
+        cout << "Column " << noOfColumns << endl;
         for (int i=0; i<Minterm8Bits.size(); i++)
+        {
             cout << Minterm8Bits[i] <<endl;
+        }
+        for (int i=0; i<arrayOfPairs.size(); i++)
+        {
+            cout << arrayOfPairs[i] <<endl;
+        }
         cout << endl;
-    }while(!VectorsEqual(Minterm8Bits,recursivePairs(Minterm8Bits, groupOfMinterms)));
-   
 
-  
-   
-
-
+    }while(!VectorsEqual(Minterm8Bits,recursivePairs(Minterm8Bits,groupOfMinterms)));
+    cout << endl;
+    
+    
+    cout << "Prime Implicants " <<endl;
+    for (int i=0; i<Minterm8Bits.size(); i++)
+        cout << Minterm8Bits[i] << endl;
+    
     return 0;
 }
 
@@ -152,6 +159,7 @@ bool existing(vector<string> a,string b)
 vector<string> recursivePairs(vector<string> binaryMinterms, Minterms groupOfMinterms)
 {
     vector<string> newminterms;
+    
     int max=binaryMinterms.size();
     int* checked = new int[max];
     for(int i=0;i<max;i++)
@@ -163,7 +171,9 @@ vector<string> recursivePairs(vector<string> binaryMinterms, Minterms groupOfMin
                 checked[i]=1;
                 checked[j]=1;
                 if(!existing(newminterms, groupOfMinterms.editByte(binaryMinterms[i], binaryMinterms[j])))
-                   newminterms.push_back(groupOfMinterms.editByte(binaryMinterms[i],binaryMinterms[j]));
+                {
+                    newminterms.push_back(groupOfMinterms.editByte(binaryMinterms[i],binaryMinterms[j]));
+                }
             }
             
             
